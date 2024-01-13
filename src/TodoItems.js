@@ -21,7 +21,7 @@ createTasks(item) {
     <li key={item.key}>
       <strong>Task:</strong> {item.text} <br />
       <strong>Priority:</strong> {item.priority} <br />
-      <strong>Date:</strong> {item.date ? item.date : "N/A"} <br />
+      <strong>Date:</strong> {item.date ? item.date : "-"} <br />
       {isCompletedTask ? (
         <button className="undoButton" onClick={() => this.props.undoDelete(item.key)}>
           Undo Delete

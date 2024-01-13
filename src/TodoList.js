@@ -5,24 +5,36 @@ import DeletedItems from "./DeletedItems";
 class TodoList extends Component {
   constructor(props) {
     super(props);
-    const storedItems = JSON.parse(localStorage.getItem("tasks")) || [];
-    const storedDeletedItems = JSON.parse(localStorage.getItem("deletedTasks")) || [];
-        //super(props);
-        //const storedItems = JSON.parse(localStorage.getItem("tasks")) || [];
-        //const storedDeletedItems = JSON.parse(localStorage.getItem("deletedTasks")) || [];
-        this.state = { items: storedItems, deletedItems: storedDeletedItems, showDeletedTasks: false, completedTasks: [] };
+    this.state = {
+      items: [],
+      deletedItems: [],
+      showDeletedTasks: false,
+      completedTasks: [],
+    };
 
-        console.log("Stored Items:", storedItems);
-            console.log("Stored Deleted Items:", storedDeletedItems);
-
-
-    //this.state = { items: storedItems, deletedItems: storedDeletedItems, showDeletedTasks: false };
-
-   // this.state = { items: storedItems, deletedItems: [], showDeletedTasks: false };
     this.addItem = this.addItem.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
     this.undoDelete = this.undoDelete.bind(this);
     this.displayDeletedTasks = this.displayDeletedTasks.bind(this);
+    this.goBack = this.goBack.bind(this);
+  }
+
+  componentDidMount() {
+    const storedItems = JSON.parse(localStorage.getItem("tasks")) || [];
+    const storedDeletedItems =
+      JSON.parse(localStorage.getItem("deletedTasks")) || [];
+
+    this.setState(
+      {
+        items: storedItems,
+        deletedItems: storedDeletedItems,
+        showDeletedTasks: false,
+      },
+      () => {
+        console.log("Stored Items:", storedItems);
+        console.log("Stored Deleted Items:", storedDeletedItems);
+      }
+    );
   }
 
   addItem(e, text, priority, date) {
@@ -76,21 +88,22 @@ class TodoList extends Component {
   goBack() {
     this.setState({ showDeletedTasks: false });
   }
-    undoDelete(key) {
-      // Implement the logic to undo the delete
-      const deletedItem = this.props.completedTasks.find((item) => item.key === key);
+  undoDelete(key) {
+    // Implement the logic to undo the delete
+    const deletedItem = this.state.completedTasks.find((item) => item.key === key);
 
-      this.setState(
-        (prevState) => ({
-          items: [...prevState.items, { ...deletedItem, key: Date.now() }],
-          deletedItems: prevState.deletedItems.filter((item) => item.key !== key),
-        }),
-        () => {
-          localStorage.setItem("tasks", JSON.stringify(this.state.items));
-          localStorage.setItem("deletedTasks", JSON.stringify(this.state.deletedItems));
-        }
-      );
-    }
+    this.setState(
+      (prevState) => ({
+        items: [...prevState.items, { ...deletedItem, key: Date.now() }],
+        deletedItems: prevState.deletedItems.filter((item) => item.key !== key),
+      }),
+      () => {
+        localStorage.setItem("tasks", JSON.stringify(this.state.items));
+        localStorage.setItem("deletedTasks", JSON.stringify(this.state.deletedItems));
+      }
+    );
+  }
+
 
    render() {
       const tasksWithDate = this.state.items.filter((item) => item.date);
