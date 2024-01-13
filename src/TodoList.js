@@ -1,13 +1,28 @@
 import React, { Component } from "react";
 import TodoItems from "./TodoItems";
+import DeletedItems from "./DeletedItems";
 
 class TodoList extends Component {
   constructor(props) {
     super(props);
-    const storedItems = JSON.parse(localStorage.getItem('tasks')) || [];
-    this.state = { items: storedItems };
+    const storedItems = JSON.parse(localStorage.getItem("tasks")) || [];
+    const storedDeletedItems = JSON.parse(localStorage.getItem("deletedTasks")) || [];
+        //super(props);
+        //const storedItems = JSON.parse(localStorage.getItem("tasks")) || [];
+        //const storedDeletedItems = JSON.parse(localStorage.getItem("deletedTasks")) || [];
+        this.state = { items: storedItems, deletedItems: storedDeletedItems, showDeletedTasks: false, completedTasks: [] };
+
+        console.log("Stored Items:", storedItems);
+            console.log("Stored Deleted Items:", storedDeletedItems);
+
+
+    //this.state = { items: storedItems, deletedItems: storedDeletedItems, showDeletedTasks: false };
+
+   // this.state = { items: storedItems, deletedItems: [], showDeletedTasks: false };
     this.addItem = this.addItem.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
+    this.undoDelete = this.undoDelete.bind(this);
+    this.displayDeletedTasks = this.displayDeletedTasks.bind(this);
   }
 
   addItem(e, text, priority, date) {
@@ -26,65 +41,122 @@ class TodoList extends Component {
           items: [...prevState.items, newItem],
         }),
         () => {
-          localStorage.setItem('tasks', JSON.stringify(this.state.items));
+          localStorage.setItem("tasks", JSON.stringify(this.state.items));
         }
       );
     }
   }
 
   deleteItem(key) {
-    const filteredItems = this.state.items.filter(item => item.key !== key);
+    const filteredItems = this.state.items.filter((item) => item.key !== key);
+    const deletedItem = this.state.items.find((item) => item.key === key);
 
     this.setState(
-      {
+      (prevState) => ({
         items: filteredItems,
-      },
+        deletedItems: [...prevState.deletedItems, { ...deletedItem, deletionTime: Date.now() }],
+      }),
       () => {
-        localStorage.setItem('tasks', JSON.stringify(this.state.items));
+        localStorage.setItem("tasks", JSON.stringify(this.state.items));
+        localStorage.setItem("deletedTasks", JSON.stringify(this.state.deletedItems));
       }
     );
   }
 
-  render() {
-    const tasksWithDate = this.state.items.filter((item) => item.date);
-    const tasksWithoutDate = this.state.items.filter((item) => !item.date || item.date === null);
+  displayDeletedTasks() {
+    const deletedTasks = JSON.parse(localStorage.getItem("deletedTasks")) || [];
+    const threeDaysAgo = Date.now() - 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
 
-    return (
-      <div className="todoListMain">
-        <div className="header">
-          <form
-            onSubmit={(e) =>
-              this.addItem(
-                e,
-                this._inputElement.value,
-                this._priorityElement.value,
-                this._dateElement.value
-              )
-            }
-          >
-            <input
-              ref={(a) => (this._inputElement = a)}
-              placeholder="Enter task"
-            ></input>
-            <select
-              ref={(a) => (this._priorityElement = a)}
-              defaultValue="Medium"
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-            <input
-              ref={(a) => (this._dateElement = a)}
-              type="date"
-              placeholder="Date"
-            ></input>
-            <button type="submit">Add</button>
-          </form>
-        </div>
+    const recentDeletedTasks = deletedTasks.filter(
+      (item) => item.deletionTime > threeDaysAgo
+    );
 
-        <div className="todoItemsContainer">
-          <TodoItems entriesWithDate={tasksWithDate} entriesWithoutDate={tasksWithoutDate} delete={this.deleteItem} />
+    this.setState({ showDeletedTasks: true, recentDeletedTasks });
+  }
+  goBack() {
+    this.setState({ showDeletedTasks: false });
+  }
+    undoDelete(key) {
+      // Implement the logic to undo the delete
+      const deletedItem = this.props.completedTasks.find((item) => item.key === key);
+
+      this.setState(
+        (prevState) => ({
+          items: [...prevState.items, { ...deletedItem, key: Date.now() }],
+          deletedItems: prevState.deletedItems.filter((item) => item.key !== key),
+        }),
+        () => {
+          localStorage.setItem("tasks", JSON.stringify(this.state.items));
+          localStorage.setItem("deletedTasks", JSON.stringify(this.state.deletedItems));
+        }
+      );
+    }
+
+   render() {
+      const tasksWithDate = this.state.items.filter((item) => item.date);
+      const tasksWithoutDate = this.state.items.filter(
+        (item) => !item.date || item.date === null
+      );
+      const completedTasks = this.state.recentDeletedTasks;
+
+      return (
+        <div>
+          <div className="fixed-top">
+            {this.state.showDeletedTasks ? (
+              <button onClick={() => this.goBack()}>Go Back</button>
+            ) : (
+              <button onClick={this.displayDeletedTasks}>Completed</button>
+            )}
+          </div>
+          <div className="todoListMain">
+            <div className="header">
+              <form
+                onSubmit={(e) =>
+                  this.addItem(
+                    e,
+                    this._inputElement.value,
+                    this._priorityElement.value,
+                    this._dateElement.value
+                  )
+                }
+              >
+              <input
+                ref={(a) => (this._inputElement = a)}
+                placeholder="Enter task"
+              ></input>
+              <select
+                ref={(a) => (this._priorityElement = a)}
+                defaultValue="Medium"
+                className="custom-select"
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+              <input
+                ref={(a) => (this._dateElement = a)}
+                type="date"
+                placeholder="Date"
+              ></input>
+              <button type="submit">Add</button>
+            </form>
+          </div>
+
+          <div className="todoItemsContainer">
+            {this.state.showDeletedTasks ? (
+              <DeletedItems
+                deletedTasks={this.state.recentDeletedTasks}
+                undoDelete={(key) => this.undoDelete(key)}
+              />
+            ) : (
+              <TodoItems
+                entriesWithDate={tasksWithDate}
+                entriesWithoutDate={tasksWithoutDate}
+                delete={this.deleteItem}
+                completedTasks={completedTasks}
+              />
+            )}
+          </div>
         </div>
       </div>
     );

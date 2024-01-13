@@ -11,9 +11,17 @@ body {
   padding: 10px;
   font-size: 16px;
   border: 2px solid #FFF;
-  width: 165px;
+  width: 200px;
   border-radius: 5px;
 }
+.todoListMain .header .custom-select {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #FFF;
+  width: 200px;
+  border-radius: 5px;
+}
+
 .todoListMain .header button {
   padding: 10px;
   font-size: 16px;
@@ -66,18 +74,12 @@ ul.theList {
 
 .tasksWithDate,
 .tasksWithoutDate {
-  width: 45%; /* Adjust the width as needed */
+  width: 45%;
 }
 .todoItemsContainer {
   display: flex;
   justify-content: space-between;
 }
-
-.tasksWithDate,
-.tasksWithoutDate {
-  width: 45%; /* Adjust the width as needed */
-}
-
 .theList {
   list-style: none;
   padding-left: 0;
@@ -98,8 +100,29 @@ ul.theList {
   background-color: pink;
   cursor: pointer;
 }
+.fixed-top button{
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  font-size: 16px;
+  margin-right: 0px;
+  margin-top: 10px;
 
-/* Add this to your existing CSS or create a new CSS file */
+  background-color: #0066FF;
+  color: #FFF;
+  border: 2px solid #0066FF;
+  border-radius: 5px;
+  z-index: 1;
+}
+.fixed-top:hover button{
+  background-color: #003399;
+  border: 2px solid #003399;
+  cursor: pointer;
+}
+
+
 button.simpleButton {
   padding: 10px;
   font-size: 16px;
@@ -118,4 +141,44 @@ button.simpleButton:hover {
   cursor: pointer;
 }
 
+/* Add this to your existing CSS or create a new CSS file */
+.completedTasksList {
+  list-style: none;
+  padding-left: 0;
+  width: 100%;
+}
+
+.completedTasksList li {
+  color: #333;
+  background-color: rgba(173, 216, 230, 0.8); /* Light blue background color for completed tasks */
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  list-style: none;
+  transition: background-color 0.2s ease-out;
+}
+
+.completedTasksList li:hover {
+  background-color: #add8e6; /* Lighter blue on hover for completed tasks */
+  cursor: pointer;
+}
+/* Add this to your existing CSS or create a new CSS file */
+.todoListMain .recentDeletedTasks {
+  width: 100%; /* Adjust the width as needed */
+}
+
+.todoListMain .recentDeletedTasks li {
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  list-style: none;
+  transition: background-color 0.2s ease-out;
+}
+
+.todoListMain .recentDeletedTasks li:hover {
+  background-color: pink;
+  cursor: pointer;
+}
 

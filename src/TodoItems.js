@@ -6,23 +6,42 @@ class TodoItems extends Component {
     this.createTasks = this.createTasks.bind(this);
   }
 
-  createTasks(item) {
-    return (
-      <li key={item.key}>
-        <strong>Task:</strong> {item.text} <br />
-        <strong>Priority:</strong> {item.priority} <br />
-        <strong>Date:</strong> {item.date ? item.date : "N/A"} <br />
+createTasks(item) {
+  if (!item || !this.props.completedTasks) {
+    return null;
+  }
+  if (!item) {
+    return null;
+  }
+  const isCompletedTask = this.props.completedTasks.some(
+    (completedTask) => completedTask.key === item.key
+  );
+
+  return (
+    <li key={item.key}>
+      <strong>Task:</strong> {item.text} <br />
+      <strong>Priority:</strong> {item.priority} <br />
+      <strong>Date:</strong> {item.date ? item.date : "N/A"} <br />
+      {isCompletedTask ? (
+        <button className="undoButton" onClick={() => this.props.undoDelete(item.key)}>
+          Undo Delete
+        </button>
+      ) : (
         <button className="simpleButton" onClick={() => this.props.delete(item.key)}>
           Delete
         </button>
+      )}
+    </li>
+  );
+}
 
-      </li>
-    );
-  }
+
 
   render() {
     const itemsWithDate = this.props.entriesWithDate;
     const itemsWithoutDate = this.props.entriesWithoutDate;
+const completedTasks = this.props.completedTasks;
+
 
     return (
       <div className="todoItemsContainer">
@@ -32,6 +51,7 @@ class TodoItems extends Component {
         <div className="tasksWithoutDate">
           <ul className="theList">{itemsWithoutDate.map(this.createTasks)}</ul>
         </div>
+
       </div>
     );
   }

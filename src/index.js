@@ -8,8 +8,9 @@ var destination = document.querySelector('#container');
 
 
 ReactDOM.render(
-  <div>
-	<TodoList/>
-  </div>, 
+    <div id="container">
+      <TodoList />
+    </div>,
   destination
 );
+
