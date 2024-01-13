@@ -1,0 +1,121 @@
+body {
+  padding: 50px;
+  background-color: #66CCFF;
+  font-family: sans-serif;
+}
+#container {
+  display: flex;
+  justify-content: center;
+}
+.todoListMain .header input {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #FFF;
+  width: 165px;
+  border-radius: 5px;
+}
+.todoListMain .header button {
+  padding: 10px;
+  font-size: 16px;
+  margin: 10px;
+  margin-right: 0px;
+  background-color: #0066FF;
+  color: #FFF;
+  border: 2px solid #0066FF;
+  border-radius: 5px;
+}
+.todoListMain .header button:hover {
+  background-color: #003399;
+  border: 2px solid #003399;
+  cursor: pointer;
+}
+.todoListMain .theList {
+  list-style: none;
+  padding-left: 0;
+  width: 250px;
+} 
+.todoListMain .theList li {
+  color: #333;
+  background-color: rgba(255,255,255,.5);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  list-style: none;
+}
+ul.theList {
+  padding: 0;
+}
+.todoListMain .theList li {
+  color: #333;
+  background-color: rgba(255,255,255,.5);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+ 
+  transition: background-color .2s ease-out;
+}
+ 
+.todoListMain .theList li:hover {
+  background-color: pink;
+  cursor: pointer;
+}
+.todoItemsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tasksWithDate,
+.tasksWithoutDate {
+  width: 45%; /* Adjust the width as needed */
+}
+.todoItemsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tasksWithDate,
+.tasksWithoutDate {
+  width: 45%; /* Adjust the width as needed */
+}
+
+.theList {
+  list-style: none;
+  padding-left: 0;
+  width: 100%; /* Make sure the width is set to 100% for individual lists */
+}
+
+.theList li {
+  color: #333;
+  background-color: rgba(255,255,255,.5);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  list-style: none;
+  transition: background-color .2s ease-out;
+}
+
+.theList li:hover {
+  background-color: pink;
+  cursor: pointer;
+}
+
+/* Add this to your existing CSS or create a new CSS file */
+button.simpleButton {
+  padding: 10px;
+  font-size: 16px;
+  margin-right: 0px;
+  margin-top: 10px;
+
+  background-color: #0066FF;
+  color: #FFF;
+  border: 2px solid #0066FF;
+  border-radius: 5px;
+}
+
+button.simpleButton:hover {
+  background-color: #003399;
+  border: 2px solid #003399;
+  cursor: pointer;
+}
+
+
