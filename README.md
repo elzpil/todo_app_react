@@ -1,2 +1,2 @@
 # todo_app_react
-souce: nazaninsbr/React-TodoList
+source: nazaninsbr/React-TodoList
